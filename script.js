@@ -21,36 +21,6 @@ function jsonToDic(data) {
   return diccionario;
 }
 
-function dataToTable(data) {
-  let diccionario = jsonToDic(data);
-  diccionario = Object.fromEntries(Object.entries(diccionario).sort()); // Ordenar por curso
-  diccionario = Object.fromEntries(
-    Object.entries(diccionario).sort((a, b) => a[1] - b[1])
-  ); // Ordenar por cantidad de estudiantes
-  let totalEstudiantes = 0;
-  const total = Object.values(diccionario).reduce((a, b) => a + b, 0);
-  for (const [curso, cantidad] of Object.entries(diccionario)) {
-    const row = table.insertRow();
-    const cell1 = row.insertCell(0); // curso
-    const cell2 = row.insertCell(1); // cantidad
-    const cell3 = row.insertCell(2); // f:acumulada
-    const cell4 = row.insertCell(3); // f:relativa
-    const cell5 = row.insertCell(4); // f:relativa porcentual
-    cell1.innerHTML = curso;
-    cell2.innerHTML = cantidad;
-    totalEstudiantes += cantidad;
-    cell3.innerHTML = totalEstudiantes;
-    cell4.innerHTML = (cantidad / total).toFixed(2);
-    cell5.innerHTML = ((cantidad / total) * 100).toFixed(2) + "%";
-  }
-  const row = table.insertRow();
-  const cell1 = row.insertCell(0); // Total label
-  const cell2 = row.insertCell(1); // Total value
-  cell1.innerHTML = "Total";
-  cell2.innerHTML = total;
-}
-
-
 
 const completePoblationBtn = document
   .getElementById("completeDataBtn")
@@ -116,10 +86,9 @@ const completePoblationBtn = document
 const frecuencyTableBtn = document
   .getElementById("frecuencyTableBtn")
   .addEventListener("click", () => {
-    
     const table = document.querySelector("table");
-    const caption = (table.querySelector("caption").innerText =
-      "Tablas de Frecuencia");
+    table.querySelector("caption").innerText =
+      "Tablas de Frecuencia";
     const tbody = table.querySelector("tbody");
     const thead = table.querySelector("thead");
     const filaEncabezado = thead.querySelector("tr");
@@ -129,16 +98,13 @@ const frecuencyTableBtn = document
           filaEncabezado.removeChild(th);
         });
       }
-      const filaBody = tbody.querySelectorAll('tr');
+      const filaBody = tbody.querySelectorAll("tr");
       if (filaBody) {
         filaBody.forEach((tr) => {
           tbody.removeChild(tr);
         });
       }
     }
-    
-
-
 
     const diccionario = jsonToDic(dataJson);
     const sortedDiccionario = Object.fromEntries(
@@ -173,69 +139,68 @@ const frecuencyTableBtn = document
       cellFrecuenciaAcumulativa.innerHTML = totalEstudiantes;
     }
     const row = tbody.insertRow();
-    const totalCell = row.insertCell(0); 
-    const totalValueCell = row.insertCell(1); 
+    const totalCell = row.insertCell(0);
+    const totalValueCell = row.insertCell(1);
     totalCell.innerHTML = "Total";
     totalValueCell.innerHTML = total;
-    
+
     // ------------------- 2da Tabla -------------------
     const newTable = document.getElementById("newTable");
-    if (!newTable) { 
-    const newTable = document.createElement("table");
-    newTable.setAttribute("id", "newTable");
+    if (!newTable) {
+      const newTable = document.createElement("table");
+      newTable.setAttribute("id", "newTable");
 
-    const newThead = document.createElement("thead");
-    const newHeaderRow = document.createElement("tr");
+      const newThead = document.createElement("thead");
+      const newHeaderRow = document.createElement("tr");
 
-    const thNivel = document.createElement("th");
-    const thFAbsoluta = document.createElement("th");
-    const thFRelativa = document.createElement("th");
-    const thFAcumulada = document.createElement("th");
-    thNivel.innerText = "Nivel Educativo";
-    thFAbsoluta.innerText = "Frecuencia Absoluta";
-    thFRelativa.innerText = "Frecuencia Relativa";
-    thFAcumulada.innerText = "Frecuencia Acumulativa";
-    
-    newHeaderRow.appendChild(thNivel);
-    newHeaderRow.appendChild(thFAbsoluta);
-    newHeaderRow.appendChild(thFRelativa);
-    newHeaderRow.appendChild(thFAcumulada);
-    newThead.appendChild(newHeaderRow);
-    newTable.appendChild(newThead);
+      const thNivel = document.createElement("th");
+      const thFAbsoluta = document.createElement("th");
+      const thFRelativa = document.createElement("th");
+      const thFAcumulada = document.createElement("th");
+      thNivel.innerText = "Nivel Educativo";
+      thFAbsoluta.innerText = "Frecuencia Absoluta";
+      thFRelativa.innerText = "Frecuencia Relativa";
+      thFAcumulada.innerText = "Frecuencia Acumulativa";
 
-    const newTbody = document.createElement("tbody");
-    const totalRow = newTbody.insertRow();
+      newHeaderRow.appendChild(thNivel);
+      newHeaderRow.appendChild(thFAbsoluta);
+      newHeaderRow.appendChild(thFRelativa);
+      newHeaderRow.appendChild(thFAcumulada);
+      newThead.appendChild(newHeaderRow);
+      newTable.appendChild(newThead);
 
-    let diccionario = {};
-    dataJson.forEach((user) => {
-      if (diccionario[user.nivel]) {
-        diccionario[user.nivel] += 1;
-      } else {
-        diccionario[user.nivel] = 1;
+      const newTbody = document.createElement("tbody");
+
+      let diccionario = {};
+      dataJson.forEach((user) => {
+        if (diccionario[user.nivel]) {
+          diccionario[user.nivel] += 1;
+        } else {
+          diccionario[user.nivel] = 1;
+        }
+      });
+      diccionario = Object.fromEntries(
+        Object.entries(diccionario).sort((a, b) => a[1] - b[1])
+      ); // Ordenar por cantidad de estudiantes
+
+      let totalEstudiantes = 0;
+      const total = Object.values(diccionario).reduce((a, b) => a + b, 0);
+
+      for (const [nivel, cantidad] of Object.entries(diccionario)) {
+        const row = newTbody.insertRow();
+        const cellNivel = row.insertCell(0);
+        const cellFAbsoluta = row.insertCell(1);
+        const cellFRelativa = row.insertCell(2);
+        const cellFAcumulada = row.insertCell(3);
+        totalEstudiantes += cantidad;
+        cellNivel.innerHTML = nivel;
+        cellFAbsoluta.innerHTML = cantidad;
+        cellFRelativa.innerHTML = (cantidad / total).toFixed(2);
+        cellFAcumulada.innerHTML = totalEstudiantes;
       }
-    });
-    diccionario = Object.fromEntries(
-      Object.entries(diccionario).sort((a, b) => a[1] - b[1])
-    ); // Ordenar por cantidad de estudiantes
-    
-    let totalEstudiantes = 0;
-    const total = Object.values(diccionario).reduce((a, b) => a + b, 0);
 
-    for (const [nivel, cantidad] of Object.entries(diccionario)) {
-      const row = newTbody.insertRow();
-      const cellNivel = row.insertCell(0);
-      const cellFAbsoluta = row.insertCell(1);
-      const cellFRelativa = row.insertCell(2);
-      const cellFAcumulada = row.insertCell(3);
-      totalEstudiantes += cantidad;
-      cellNivel.innerHTML = nivel;
-      cellFAbsoluta.innerHTML = cantidad;
-      cellFRelativa.innerHTML = (cantidad / total).toFixed(2);
-      cellFAcumulada.innerHTML = totalEstudiantes;
-    }
-    
-    newTable.appendChild(newTbody);
-    document.body.appendChild(newTable);
+      newTable.appendChild(newTbody);
+      document.body.appendChild(newTable);
     }
   });
 
@@ -257,7 +222,7 @@ const statsTableBtn = document
           filaEncabezado.removeChild(th);
         });
       }
-      const filaBody = tbody.querySelectorAll('tr');
+      const filaBody = tbody.querySelectorAll("tr");
       if (filaBody) {
         filaBody.forEach((tr) => {
           tbody.removeChild(tr);
@@ -285,7 +250,7 @@ const statsTableBtn = document
 
     const rowMaximo = tbody.insertRow();
     const cellMaximo = rowMaximo.insertCell(0);
-    const cellMaximoValue = rowMaximo.insertCell(1); 
+    const cellMaximoValue = rowMaximo.insertCell(1);
     cellMaximo.innerHTML = "Maximo";
     cellMaximoValue.innerHTML = getMaximo(); // Maximo
 
@@ -312,48 +277,64 @@ const statsTableBtn = document
     const cellDesvioValue = rowDesvio.insertCell(1);
     cellDesvio.innerHTML = "Desvio Estandar";
     cellDesvioValue.innerHTML = getDesvio(); // Desvio Estandar
-
   });
 
-  function getMedia() {
-    let acumulado = 0;
-    dataJson.forEach((data) => {
-      acumulado += data.Edad;
-    });
-    return (acumulado / dataJson.length).toFixed(2);
-  }
+function getMedia() {
+  let acumulado = 0;
+  dataJson.forEach((data) => {
+    acumulado += data.Edad;
+  });
+  return (acumulado / dataJson.length).toFixed(2);
+}
 
-  function getMediana() {
-    dataJson.sort((a, b) => a.Edad - b.Edad);
-    const mediana = dataJson[Math.round(length/2)].Edad;
-    return mediana;
+function getMediana() {
+  const edades = dataJson.map(data => data.Edad).sort((a, b) => a - b);
+  const length = edades.length;
+  if (length % 2 === 0) {
+    return ((edades[length / 2 - 1] + edades[length / 2]) / 2).toFixed(2);
+  } else {
+    return edades[Math.floor(length / 2)];
   }
+}
 
-  function getMaximo() {
-    return Math.max(...dataJson.map((data) => data.Edad));
+
+function getMaximo() {
+  return Math.max(...dataJson.map((data) => data.Edad));
+}
+
+function getMinimo() {
+  return Math.min(...dataJson.map((data) => data.Edad));
+}
+
+function getPrimerCuartil() {
+  dataJson.sort((a, b) => a.Edad - b.Edad);
+  const length = dataJson.length;
+  const primerCuartil = dataJson[Math.round(length * 0.25)].Edad;
+  return primerCuartil;
+}
+
+function getDesvio() {
+  const media = parseFloat(getMedia());
+  const sumatoria = dataJson.reduce((acc, curr) => acc + Math.pow(curr.Edad - media, 2), 0);
+  const desvio = Math.sqrt(sumatoria / dataJson.length);
+  return desvio.toFixed(2);
+}
+
+
+window.onload = async () => {
+  try {
+    await obtainData();
+    document.getElementById("tableCaption").innerText = 'Selecciona una tabla';
+  } catch (error) {
+    alert("Error fetching data. Please try again later.");
+    document.getElementById("tableCaption").innerText =
+      "Error al cargar los datos";
+    document.getElementById("tableCaption").style.color = "red";
+    document.getElementById("tableCaption").style.fontSize = "20px";
+    document.getElementById('completeDataBtn').disabled = true;
+    document.getElementById('frecuencyTableBtn').disabled = true;
+    document.getElementById('statsTableBtn').disabled = true;
+    
   }
-
-  function getMinimo() {
-    return Math.min(...dataJson.map((data) => data.Edad));
-  }
-
-  function getPrimerCuartil() {
-    dataJson.sort((a, b) => a.Edad - b.Edad);
-    const length = dataJson.length;
-    const primerCuartil = dataJson[Math.round(length * 0.25)].Edad;
-    return primerCuartil;
-  }
-
-  function getDesvio() {
-    let acumulado = 0;
-    const media = getMedia();
-    dataJson.forEach((data) => {
-      acumulado += Math.pow(data.Edad - media, 2);
-    });
-    return Math.sqrt(acumulado / dataJson.length).toFixed(2);
-  }
-
-  window.onload = async () => {
-    const data = await obtainData();
-    //dataToTable(data);
-  };
+  
+};
