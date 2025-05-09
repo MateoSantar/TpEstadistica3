@@ -141,6 +141,8 @@ const frecuencyTableBtn = document
     const row = tbody.insertRow();
     const totalCell = row.insertCell(0);
     const totalValueCell = row.insertCell(1);
+    const fillCell = row.insertCell(2);
+    const fillCell2 = row.insertCell(3);
     totalCell.innerHTML = "Total";
     totalValueCell.innerHTML = total;
 
@@ -320,6 +322,10 @@ function getDesvio() {
   return desvio.toFixed(2);
 }
 
+function toggleVisibily(table) {
+  table.classList.toggle("hidden");
+}
+
 
 window.onload = async () => {
   try {
@@ -338,3 +344,4 @@ window.onload = async () => {
   }
   
 };
+
