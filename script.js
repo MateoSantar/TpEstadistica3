@@ -86,9 +86,9 @@ const completePoblationBtn = document
 const frecuencyTableBtn = document
   .getElementById("frecuencyTableBtn")
   .addEventListener("click", () => {
-    const table = document.querySelector("table");
+    let table = document.querySelector("table");
     table.querySelector("caption").innerText =
-      "Tablas de Frecuencia";
+    "Tablas de Frecuencia";
     const tbody = table.querySelector("tbody");
     const thead = table.querySelector("thead");
     const filaEncabezado = thead.querySelector("tr");
@@ -149,9 +149,12 @@ const frecuencyTableBtn = document
     // ------------------- 2da Tabla -------------------
     const newTable = document.getElementById("newTable");
     if (!newTable) {
+      setTimeout(1000);
       const newTable = document.createElement("table");
       newTable.setAttribute("id", "newTable");
-
+      newTable.classList.add('hidden');
+      newTable.classList.remove('hidden');
+      
       const newThead = document.createElement("thead");
       const newHeaderRow = document.createElement("tr");
 

@@ -69,13 +69,14 @@ button {
   font-size: 20px;
   margin: 4px 2px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
   border-radius: 5px;
   filter: drop-shadow(0 0 2px #000);
 }
 
 button:hover {
   background-color: #5b5a5a;
+  transform: scale(1.01);
 }
 
 caption {
@@ -101,7 +102,6 @@ table {
   padding: 40px;
   margin-bottom: 10px;
   font-size: 1.05rem;
-  transition: all 0.4s ease-in-out;
   border: 2px solid #000000;
 }
 
@@ -133,8 +133,4 @@ tr:nth-child(even) {
 
 tr:hover {
   background-color: #f1f1f1;
-}
-
-.hidden {
-  visibility: hidden;
 }
